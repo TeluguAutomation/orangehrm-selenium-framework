@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="OrangeHRM Test Suite - Chrome Only" verbose="1">
+    
+    <!-- Login Tests - Chrome -->
+    <test name="Login Tests - Chrome">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="com.OrangeHRM.UITest.testCases.LoginTest"/>
+        </classes>
+    </test>
+    
+    <!-- Dashboard Tests - Chrome -->
+    <test name="Dashboard Tests - Chrome">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="com.OrangeHRM.UITest.testCases.DashboardTest"/>
+        </classes>
+    </test>
+    
+    <!-- Logout Tests - Chrome -->
+    <test name="Logout Tests - Chrome">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="com.OrangeHRM.UITest.testCases.LogoutTest"/>
+        </classes>
+    </test>
+    
+    <!-- All Tests - Chrome -->
+  <!--  <test name="All Tests - Chrome">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="com.OrangeHRM.UITest.testCases.LoginTest"/>
+            <class name="com.OrangeHRM.UITest.testCases.DashboardTest"/>
+            <class name="com.OrangeHRM.UITest.testCases.LogoutTest"/>
+        </classes>
+    </test> -->
+    
+</suite>
