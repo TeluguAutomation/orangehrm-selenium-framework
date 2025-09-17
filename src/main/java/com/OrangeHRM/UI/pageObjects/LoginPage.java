@@ -7,6 +7,10 @@ import org.openqa.selenium.support.PageFactory;
 import com.OrangeHRM.UI.basePage.BasePage;
 import com.OrangeHRM.UI.config.TestConfig;
 
+// Log4j2 imports
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 /**
  * LoginPage - Page Object Model for OrangeHRM Login functionality
@@ -36,6 +40,9 @@ import com.OrangeHRM.UI.config.TestConfig;
  * boolean isLoggedIn = loginPage.isLoginSuccessful();
  */
 public class LoginPage extends BasePage {
+
+    // Logger instance
+    private static final Logger logger = LogManager.getLogger(LoginPage.class);
 
     // Page Locators - Using @FindBy annotations
     @FindBy(name = "username")
@@ -71,6 +78,7 @@ public class LoginPage extends BasePage {
      * @param username Username to enter
      */
     public void enterUsername(String username) {
+        logger.debug("Entering username: {}", username);
         commonMethods.enterText(usernameField, username);
     }
 
@@ -81,6 +89,7 @@ public class LoginPage extends BasePage {
      * @param password Password to enter
      */
     public void enterPassword(String password) {
+        logger.debug("Entering password");
         commonMethods.enterText(passwordField, password);
     }
 
@@ -94,6 +103,7 @@ public class LoginPage extends BasePage {
      * - Clicks the login button
      */
     public void clickLoginButton() {
+        logger.debug("Clicking login button");
         commonMethods.clickElement(loginButton);
     }
 
@@ -112,9 +122,9 @@ public class LoginPage extends BasePage {
      * @param password Valid password
      */
     public void login(String username, String password) {
-        System.out.println("=== Starting Login Process ===");
-        System.out.println("Username: " + username);
-        System.out.println("Password: " + "*****"); // Don't log password
+        logger.info("=== Starting Login Process ===");
+        logger.info("Username: {}", username);
+        logger.debug("Password: *****"); // Don't log actual password
         
         // Enter credentials
         enterUsername(username);
@@ -126,12 +136,13 @@ public class LoginPage extends BasePage {
         // Wait for dashboard to load (indicates successful login)
         try {
             commonMethods.waitForElementToBeVisible(dashboardTitle);
+            logger.info("✓ Login successful - Dashboard loaded");
         } catch (Exception e) {
             // If dashboard doesn't appear, login might have failed
-            System.out.println("Dashboard not found after login attempt");
+            logger.error("Dashboard not found after login attempt: {}", e.getMessage());
         }
         
-        System.out.println("=== Login Process Complete ===");
+        logger.info("=== Login Process Complete ===");
     }
 
     /**

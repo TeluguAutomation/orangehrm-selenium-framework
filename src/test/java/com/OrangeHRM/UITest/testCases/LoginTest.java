@@ -39,6 +39,10 @@ public class LoginTest extends BaseTest {
      * - Test data from TestConfig (config.properties)
      * - Page objects receive data as parameters
      * - Simple and clean approach
+     * 
+     * EXTENT REPORTS:
+     * - Automatically handled by ExtentReportManager listener
+     * - No need for manual logging in test methods
      */
     @Test
     public void testValidLogin() {

@@ -37,6 +37,50 @@
     <scope>test</scope>
 </dependency>
 
+<!-- Extent Reports Dependencies -->
+<!-- https://mvnrepository.com/artifact/com.aventstack/extentreports -->
+<dependency>
+    <groupId>com.aventstack</groupId>
+    <artifactId>extentreports</artifactId>
+    <version>5.1.1</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
+<dependency>
+    <groupId>org.freemarker</groupId>
+    <artifactId>freemarker</artifactId>
+    <version>2.3.32</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/com.aventstack/extentreports-testng-adapter -->
+<dependency>
+    <groupId>com.aventstack</groupId>
+    <artifactId>extentreports-testng-adapter</artifactId>
+    <version>1.2.2</version>
+</dependency>
+
+<!-- Log4j2 Dependencies -->
+<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-core</artifactId>
+    <version>2.23.1</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-api</artifactId>
+    <version>2.23.1</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
+<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-slf4j-impl</artifactId>
+    <version>2.23.1</version>
+</dependency>
+
 
   </dependencies>
 

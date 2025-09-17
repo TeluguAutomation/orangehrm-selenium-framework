@@ -7,6 +7,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import com.OrangeHRM.UI.config.TestConfig;
 
+
 public class BasePage {
 	
 

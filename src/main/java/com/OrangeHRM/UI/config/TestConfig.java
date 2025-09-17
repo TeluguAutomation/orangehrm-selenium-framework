@@ -76,4 +76,12 @@ public class TestConfig {
     
     // Report Settings
     public static final String REPORT_PATH = properties.getProperty("reportPath", "target/test-reports/");
+    
+    // Extent Report Settings
+    public static final String EXTENT_REPORT_PATH = properties.getProperty("extentReportPath", "target/extent-reports/");
+    public static final String EXTENT_REPORT_NAME = properties.getProperty("extentReportName", "OrangeHRM_TestReport.html");
+    public static final String EXTENT_REPORT_TITLE = properties.getProperty("extentReportTitle", "OrangeHRM Selenium Framework Test Report");
+    public static final String EXTENT_REPORT_DOCUMENT_TITLE = properties.getProperty("extentReportDocumentTitle", "OrangeHRM Automation Test Results");
+    public static final String EXTENT_REPORT_THEME = properties.getProperty("extentReportTheme", "standard");
+    public static final String EXTENT_REPORT_TIME_STAMP_FORMAT = properties.getProperty("extentReportTimeStampFormat", "MMM dd, yyyy HH:mm:ss");
 }

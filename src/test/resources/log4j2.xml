@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Properties>
+        <Property name="basepath">./test-output/logs</Property>
+        <Property name="logPattern">%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${logPattern}"/>
+        </Console>
+
+        <!-- Single Rolling File Appender for All Logs -->
+        <RollingFile name="File" fileName="${basepath}/orangehrm-automation.log"
+                     filePattern="${basepath}/orangehrm-automation-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${logPattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- OrangeHRM Application Logger -->
+        <!-- 
+        LOG LEVELS:
+        - DEBUG: For local development (shows detailed step-by-step logs)
+        - INFO:  For production (shows important events only)
+        
+        AUTOMATIC SWITCHING:
+        - Local Development: mvn test -Dlog.level=DEBUG
+        - Production:        mvn test (uses INFO by default)
+
+        Maven Commands:
+        - Local Development: mvn test -Dlog.level=DEBUG
+        - Production:        mvn test (uses INFO by default)
+        -->
+        <Logger name="com.OrangeHRM" level="${sys:log.level:-INFO}" additivity="false">
+            <AppenderRef ref="File"/>
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- Root logger - Everything else goes to single file -->
+        <Root level="INFO">
+            <AppenderRef ref="File"/>
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
+
+<!-- 
+Logging Configuration for OrangeHRM Automation Framework
+
+Log Levels (from lowest to highest priority):
+- ALL: All events are logged
+- TRACE: Very detailed information
+- DEBUG: Detailed information for debugging
+- INFO: General information about program execution
+- WARN: Warning messages for potential issues
+- ERROR: Error events that might still allow the application to continue
+- FATAL: Very severe error events that will presumably lead the application to abort
+- OFF: No logging
+
+Appenders:
+- Console: Outputs logs to console/terminal
+- File: Main automation logs with rolling file policy
+- TestResults: Dedicated logs for test execution results
+- ErrorFile: Dedicated logs for error messages only
+
+Loggers:
+- org.testng: TestNG framework logs
+- org.openqa.selenium: Selenium WebDriver logs (WARN level to reduce noise)
+- io.github.bonigarcia: WebDriverManager logs (WARN level to reduce noise)
+- com.OrangeHRM: Application-specific logs (DEBUG level for detailed logging)
+- ERROR: Error-specific logs
+- Root: Default logger for all other components
+
+Rolling Policy:
+- Time-based: New file every day
+- Size-based: New file when current file reaches specified size
+- Max files: Keeps specified number of old files (compressed)
+-->

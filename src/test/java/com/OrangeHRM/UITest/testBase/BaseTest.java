@@ -5,17 +5,23 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.testng.annotations.*;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import com.OrangeHRM.UI.config.TestConfig;
-import com.OrangeHRM.UI.pageObjects.LoginPage;
-import com.OrangeHRM.UI.pageObjects.DashboardPage;
-import com.OrangeHRM.UI.pageObjects.LogoutPage;
+import com.OrangeHRM.UI.pageObjects.*;
+
+import org.testng.ITestResult;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+// Log4j2 imports
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 /**
  * BaseTest - Base class for all test cases
@@ -45,6 +51,9 @@ public class BaseTest {
 
     protected WebDriver driver;
     
+    // Logger instance
+    protected static final Logger logger = LogManager.getLogger(BaseTest.class);
+    
     // Page Object Fields - Available to all test classes
     protected LoginPage loginPage;
     protected DashboardPage dashboardPage;
@@ -73,6 +82,11 @@ public class BaseTest {
         System.out.println("Screenshot on Failure: " + TestConfig.SCREENSHOT_ON_FAILURE);
         System.out.println("Screenshot Path: " + TestConfig.SCREENSHOT_PATH);
         System.out.println("Report Path: " + TestConfig.REPORT_PATH);
+        System.out.println("Extent Report Path: " + TestConfig.EXTENT_REPORT_PATH);
+        System.out.println("Extent Report Name: " + TestConfig.EXTENT_REPORT_NAME);
+        
+        // Extent Reports will be initialized automatically by ExtentReportManager listener
+        System.out.println("Extent Reports will be initialized by listener!");
         
         // Validate critical properties
         validateConfigurationProperties();
@@ -90,29 +104,31 @@ public class BaseTest {
     @BeforeMethod
     @Parameters("browser")
     public void setUp(@Optional("") String browser) {
-        System.out.println("=== @BeforeMethod (setUp) - Fresh browser per test ===");
+        logger.info("=== @BeforeMethod (setUp) - Fresh browser per test ===");
         
         // Initialize WebDriver - Priority: TestNG XML parameter > config.properties
         String browserName;
         if (browser != null && !browser.isEmpty()) {
             browserName = browser;
-            System.out.println("Using browser from TestNG XML: " + browserName);
+            logger.info("Using browser from TestNG XML: {}", browserName);
         } else {
             browserName = TestConfig.BROWSER;
-            System.out.println("Using browser from config.properties: " + browserName);
+            logger.info("Using browser from config.properties: {}", browserName);
         }
         
         initializeDriver(browserName);
         
         // Clear all cookies
         driver.manage().deleteAllCookies();
+        logger.debug("✓ Cookies cleared");
         
         // Open URL
         driver.get(TestConfig.BASE_URL);
+        logger.info("✓ Navigated to: {}", TestConfig.BASE_URL);
         
         // Maximize window
         driver.manage().window().maximize();
-        
+        logger.debug("✓ Window maximized");
         
         // Configure browser timeouts
         configureBrowserTimeouts();
@@ -120,10 +136,10 @@ public class BaseTest {
         // Initialize Page Objects - Available to all test classes
         initializePageObjects();
 
-        System.out.println("Final Browser: " + browserName);
-        System.out.println("URL: " + TestConfig.BASE_URL);
-        System.out.println("Page Title: " + driver.getTitle());
-        System.out.println("=== @BeforeMethod Complete ===\n");
+        logger.info("Final Browser: {}", browserName);
+        logger.info("URL: {}", TestConfig.BASE_URL);
+        logger.info("Page Title: {}", driver.getTitle());
+        logger.info("=== @BeforeMethod Complete ===");
     }
     
     /**
@@ -131,16 +147,22 @@ public class BaseTest {
      * Runs after each test method
      */
     @AfterMethod
-    public void tearDown() {
-        System.out.println("=== @AfterMethod (tearDown) - Close browser ===");
+    public void tearDown(ITestResult result) {
+        logger.info("=== @AfterMethod (tearDown) - Close browser ===");
+        
+        // Extent Reports are handled automatically by ExtentReportManager listener
+        logger.info("Test Status: {}", result.getStatus());
+        if (result.getStatus() == ITestResult.FAILURE) {
+            logger.error("Test failed: {}", result.getThrowable().getMessage());
+        }
         
         if (driver != null) {
-            System.out.println("Closing browser...");
+            logger.info("Closing browser...");
             driver.quit();
             driver = null;
         }
         
-        System.out.println("=== @AfterMethod Complete ===\n");
+        logger.info("=== @AfterMethod Complete ===");
     }
     
     /**
@@ -157,6 +179,9 @@ public class BaseTest {
             driver.quit();
             driver = null;
         }
+        
+        // Extent Reports are flushed automatically by ExtentReportManager listener
+        System.out.println("Extent Reports will be generated by listener!");
         
         // Clean up any temporary files, reports, etc.
         System.out.println("Cleaning up test data...");
@@ -175,17 +200,17 @@ public class BaseTest {
      * - Centralized page object management
      */
     private void initializePageObjects() {
-        System.out.println("Initializing Page Objects...");
+        logger.info("Initializing Page Objects...");
         
         // Create page object instances
         loginPage = new LoginPage(driver);
         dashboardPage = new DashboardPage(driver);
         logoutPage = new LogoutPage(driver);
         
-        System.out.println("✓ Page Objects initialized successfully!");
-        System.out.println("- LoginPage: " + (loginPage != null ? "✓" : "✗"));
-        System.out.println("- DashboardPage: " + (dashboardPage != null ? "✓" : "✗"));
-        System.out.println("- LogoutPage: " + (logoutPage != null ? "✓" : "✗"));
+        logger.info("✓ Page Objects initialized successfully!");
+        logger.debug("- LoginPage: {}", (loginPage != null ? "✓" : "✗"));
+        logger.debug("- DashboardPage: {}", (dashboardPage != null ? "✓" : "✗"));
+        logger.debug("- LogoutPage: {}", (logoutPage != null ? "✓" : "✗"));
     }
 
     /**
@@ -195,30 +220,35 @@ public class BaseTest {
      * @param browserName Browser to initialize
      */
     private void initializeDriver(String browserName) {
-        System.out.println("Initializing " + browserName + " driver...");
+        logger.info("Initializing {} driver...", browserName);
         
         switch (browserName.toLowerCase()) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
                 driver = new ChromeDriver();
+                logger.debug("✓ Chrome driver initialized");
                 break;
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
                 driver = new FirefoxDriver();
+                logger.debug("✓ Firefox driver initialized");
                 break;
             case "edge":
                 WebDriverManager.edgedriver().setup();
                 driver = new EdgeDriver();
+                logger.debug("✓ Edge driver initialized");
                 break;
             case "safari":
                 WebDriverManager.safaridriver().setup();
                 driver = new SafariDriver();
+                logger.debug("✓ Safari driver initialized");
                 break;
             default:
+                logger.error("Unsupported browser: {}", browserName);
                 throw new IllegalArgumentException("Unsupported browser: " + browserName);
         }
         
-        System.out.println(browserName + " driver initialized successfully!");
+        logger.info("{} driver initialized successfully!", browserName);
     }
     
     /**
@@ -281,5 +311,36 @@ public class BaseTest {
         }
         
         System.out.println("✓ All configuration properties validated successfully!");
+    }
+    
+    // Note: Extent Reports are now handled automatically by ExtentReportManager listener
+    // No need for manual test creation or logging in test methods
+    
+    /**
+     * Capture screenshot method for ExtentReportManager
+     * 
+     * @param testName Name of the test for screenshot naming
+     * @return Path to screenshot file
+     */
+    public String captureScreen(String testName) throws IOException {
+        logger.debug("Capturing screenshot for test: {}", testName);
+        
+        String timeStamp = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
+        TakesScreenshot takesScreenshot = (TakesScreenshot) driver;
+        File sourceFile = takesScreenshot.getScreenshotAs(OutputType.FILE);
+        
+        String targetFilePath = TestConfig.SCREENSHOT_PATH + testName + "_" + timeStamp + ".png";
+        File targetFile = new File(targetFilePath);
+        
+        // Create screenshot directory if it doesn't exist
+        File screenshotDir = new File(TestConfig.SCREENSHOT_PATH);
+        if (!screenshotDir.exists()) {
+            screenshotDir.mkdirs();
+            logger.debug("Created screenshot directory: {}", TestConfig.SCREENSHOT_PATH);
+        }
+        
+        sourceFile.renameTo(targetFile);
+        logger.info("Screenshot captured: {}", targetFilePath);
+        return targetFilePath;
     }
 }
