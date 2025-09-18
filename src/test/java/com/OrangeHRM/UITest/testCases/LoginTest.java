@@ -1,7 +1,9 @@
 package com.OrangeHRM.UITest.testCases;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import com.OrangeHRM.UITest.testBase.BaseTest;
 import com.OrangeHRM.UI.pageObjects.LoginPage;
 import com.OrangeHRM.UI.config.TestConfig;
@@ -25,6 +27,19 @@ import com.OrangeHRM.UI.config.TestConfig;
  * - Validates login success/failure scenarios
  */
 public class LoginTest extends BaseTest {
+
+    // Global SoftAssert instance for this test class
+    private SoftAssert softAssert;
+
+    /**
+     * @BeforeMethod - Initialize SoftAssert for each test method
+     * This runs before each test method in this class
+     */
+    @BeforeMethod
+    public void setUpSoftAssert() {
+        softAssert = new SoftAssert();
+        System.out.println("✓ SoftAssert initialized for test method");
+    }
 
     /**
      * Test Method - Valid login with config data
@@ -56,13 +71,16 @@ public class LoginTest extends BaseTest {
         // loginPage is already initialized in BaseTest @BeforeMethod
         loginPage.login(username, password);
         
-        // Verify login success using LoginPage methods
-        Assert.assertTrue(loginPage.isLoginSuccessful(), 
+        // Soft Assertions - Continue execution even if one fails
+        // Using global softAssert instance (no need to create new one)
+        softAssert.assertTrue(loginPage.isLoginSuccessful(), 
             "Login should be successful with valid credentials");
         
-        // Additional verification using LoginPage methods
-        Assert.assertTrue(loginPage.isPageTitleContains("OrangeHRM"), 
+        softAssert.assertTrue(loginPage.isPageTitleContains("OrangeHRM"), 
             "Page title should contain 'OrangeHRM' after successful login");
+        
+        // Verify all soft assertions at the end
+        softAssert.assertAll();
         
         System.out.println("✓ Valid login test passed!");
         System.out.println("=== Test Method Complete ===\n");

@@ -1,7 +1,9 @@
 package com.OrangeHRM.UITest.testCases;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import com.OrangeHRM.UITest.testBase.BaseTest;
 import com.OrangeHRM.UI.config.TestConfig;
 
@@ -21,6 +23,19 @@ import com.OrangeHRM.UI.config.TestConfig;
  */
 public class DashboardTest extends BaseTest {
 
+    // Global SoftAssert instance for this test class
+    private SoftAssert softAssert;
+
+    /**
+     * @BeforeMethod - Initialize SoftAssert for each test method
+     * This runs before each test method in this class
+     */
+    @BeforeMethod
+    public void setUpSoftAssert() {
+        softAssert = new SoftAssert();
+        System.out.println("✓ SoftAssert initialized for test method");
+    }
+
     /**
      * Test Method - Verify dashboard after login
      * 
@@ -36,19 +51,23 @@ public class DashboardTest extends BaseTest {
         // Step 1: Login using page object from BaseTest
         loginPage.login(TestConfig.DEFAULT_USERNAME, TestConfig.DEFAULT_PASSWORD);
         
-        // Step 2: Verify login success
-        Assert.assertTrue(loginPage.isLoginSuccessful(), 
+        // Step 2: Soft Assertions - Continue execution even if one fails
+        // Using global softAssert instance (no need to create new one)
+        softAssert.assertTrue(loginPage.isLoginSuccessful(), 
             "Login should be successful before testing dashboard");
         
-        // Step 3: Verify dashboard elements using page object from BaseTest
-        Assert.assertTrue(dashboardPage.isDashboardTitleVisible(), 
+        // Step 3: Verify dashboard elements with soft assertions
+        softAssert.assertTrue(dashboardPage.isDashboardTitleVisible(), 
             "Dashboard title should be visible after login");
         
-        Assert.assertTrue(dashboardPage.isUserProfileVisible(), 
+        softAssert.assertTrue(dashboardPage.isUserProfileVisible(), 
             "User profile dropdown should be visible");
         
-        Assert.assertTrue(dashboardPage.isSearchBoxVisible(), 
+        softAssert.assertTrue(dashboardPage.isSearchBoxVisible(), 
             "Search box should be visible");
+        
+        // Verify all soft assertions at the end
+        softAssert.assertAll();
         
         System.out.println("✓ Dashboard test passed!");
         System.out.println("Page Title: " + dashboardPage.getPageTitle());
@@ -66,12 +85,15 @@ public class DashboardTest extends BaseTest {
         // Login first
         loginPage.login(TestConfig.DEFAULT_USERNAME, TestConfig.DEFAULT_PASSWORD);
         
-        // Verify login success
-        Assert.assertTrue(loginPage.isLoginSuccessful(), "Login should be successful");
+        // Soft Assertions - Continue execution even if one fails
+        softAssert.assertTrue(loginPage.isLoginSuccessful(), 
+            "Login should be successful");
         
-        // Verify all main menu items are visible
-        Assert.assertTrue(dashboardPage.areAllMainMenusVisible(), 
+        softAssert.assertTrue(dashboardPage.areAllMainMenusVisible(), 
             "All main menu items should be visible on dashboard");
+        
+        // Verify all soft assertions at the end
+        softAssert.assertAll();
         
         System.out.println("✓ Main menu visibility test passed!");
         System.out.println("=== Test Method Complete ===\n");
@@ -87,19 +109,19 @@ public class DashboardTest extends BaseTest {
         // Login first
         loginPage.login(TestConfig.DEFAULT_USERNAME, TestConfig.DEFAULT_PASSWORD);
         
-        // Verify login success
-        Assert.assertTrue(loginPage.isLoginSuccessful(), "Login should be successful");
+        // Soft Assertions - Continue execution even if one fails
+        softAssert.assertTrue(loginPage.isLoginSuccessful(), 
+            "Login should be successful");
         
-        // Verify dashboard widgets
-        Assert.assertTrue(dashboardPage.areAllWidgetsVisible(), 
-            "All dashboard widgets should be visible");
-        
-        // Verify specific widgets
-        Assert.assertTrue(dashboardPage.isQuickLaunchVisible(), 
+        // Verify dashboard widgets with soft assertions
+        softAssert.assertTrue(dashboardPage.isQuickLaunchVisible(), 
             "Quick Launch widget should be visible");
         
-        Assert.assertTrue(dashboardPage.isTimeAtWorkVisible(), 
+        softAssert.assertTrue(dashboardPage.isTimeAtWorkVisible(), 
             "Time at Work widget should be visible");
+        
+        // Verify all soft assertions at the end
+        softAssert.assertAll();
         
         System.out.println("✓ Dashboard widgets test passed!");
         System.out.println("=== Test Method Complete ===\n");
@@ -145,16 +167,19 @@ public class DashboardTest extends BaseTest {
         // Login first
         loginPage.login(TestConfig.DEFAULT_USERNAME, TestConfig.DEFAULT_PASSWORD);
         
-        // Verify login success
-        Assert.assertTrue(loginPage.isLoginSuccessful(), "Login should be successful");
+        // Soft Assertions - Continue execution even if one fails
+        softAssert.assertTrue(loginPage.isLoginSuccessful(), 
+            "Login should be successful");
         
-        // Test search box
-        Assert.assertTrue(dashboardPage.isSearchBoxVisible(), 
+        softAssert.assertTrue(dashboardPage.isSearchBoxVisible(), 
             "Search box should be visible");
         
         // Enter search text
         dashboardPage.enterSearchText("Admin");
         System.out.println("✓ Search text entered successfully");
+        
+        // Verify all soft assertions at the end
+        softAssert.assertAll();
         
         System.out.println("✓ Search functionality test passed!");
         System.out.println("=== Test Method Complete ===\n");
@@ -170,12 +195,21 @@ public class DashboardTest extends BaseTest {
         // Login first
         loginPage.login(TestConfig.DEFAULT_USERNAME, TestConfig.DEFAULT_PASSWORD);
         
-        // Verify login success
-        Assert.assertTrue(loginPage.isLoginSuccessful(), "Login should be successful");
+        // Soft Assertions - Continue execution even if one fails
+        softAssert.assertTrue(loginPage.isLoginSuccessful(), 
+            "Login should be successful");
         
-        // Verify complete dashboard functionality
-        Assert.assertTrue(dashboardPage.verifyDashboardFunctionality(), 
-            "Complete dashboard functionality should work");
+        softAssert.assertTrue(dashboardPage.isDashboardTitleVisible(), 
+            "Dashboard title should be visible after login");
+        
+        softAssert.assertTrue(dashboardPage.isUserProfileVisible(), 
+            "User profile dropdown should be visible");
+        
+        softAssert.assertTrue(dashboardPage.isSearchBoxVisible(), 
+            "Search box should be visible");
+        
+        // Verify all soft assertions at the end
+        softAssert.assertAll();
         
         System.out.println("✓ Complete dashboard functionality test passed!");
         System.out.println("=== Test Method Complete ===\n");

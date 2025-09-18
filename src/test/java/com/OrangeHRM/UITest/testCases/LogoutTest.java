@@ -1,7 +1,9 @@
 package com.OrangeHRM.UITest.testCases;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import com.OrangeHRM.UITest.testBase.BaseTest;
 import com.OrangeHRM.UI.config.TestConfig;
 
@@ -22,6 +24,19 @@ import com.OrangeHRM.UI.config.TestConfig;
  */
 public class LogoutTest extends BaseTest {
 
+    // Global SoftAssert instance for this test class
+    private SoftAssert softAssert;
+
+    /**
+     * @BeforeMethod - Initialize SoftAssert for each test method
+     * This runs before each test method in this class
+     */
+    @BeforeMethod
+    public void setUpSoftAssert() {
+        softAssert = new SoftAssert();
+        System.out.println("✓ SoftAssert initialized for test method");
+    }
+
     /**
      * Test Method - Verify profile dropdown is visible
      */
@@ -32,12 +47,15 @@ public class LogoutTest extends BaseTest {
         // Login first
         loginPage.login(TestConfig.DEFAULT_USERNAME, TestConfig.DEFAULT_PASSWORD);
         
-        // Verify login success
-        Assert.assertTrue(loginPage.isLoginSuccessful(), "Login should be successful");
+        // Soft Assertions - Continue execution even if one fails
+        softAssert.assertTrue(loginPage.isLoginSuccessful(), 
+            "Login should be successful");
         
-        // Test profile dropdown visibility
-        Assert.assertTrue(logoutPage.isUserProfileDropdownVisible(), 
+        softAssert.assertTrue(logoutPage.isUserProfileDropdownVisible(), 
             "User profile dropdown should be visible");
+        
+        // Verify all soft assertions at the end
+        softAssert.assertAll();
         
         System.out.println("✓ Profile dropdown visibility test passed!");
         System.out.println("=== Test Method Complete ===\n");
@@ -53,12 +71,16 @@ public class LogoutTest extends BaseTest {
         // Login first
         loginPage.login(TestConfig.DEFAULT_USERNAME, TestConfig.DEFAULT_PASSWORD);
         
-        // Verify login success
-        Assert.assertTrue(loginPage.isLoginSuccessful(), "Login should be successful");
+        // Soft Assertions - Continue execution even if one fails
+        softAssert.assertTrue(loginPage.isLoginSuccessful(), 
+            "Login should be successful");
         
         // Test clicking profile dropdown
         logoutPage.clickUserProfileDropdown();
         System.out.println("✓ Profile dropdown clicked successfully");
+        
+        // Verify all soft assertions at the end
+        softAssert.assertAll();
         
         System.out.println("✓ Profile dropdown click test passed!");
         System.out.println("=== Test Method Complete ===\n");
@@ -74,19 +96,23 @@ public class LogoutTest extends BaseTest {
         // Login first
         loginPage.login(TestConfig.DEFAULT_USERNAME, TestConfig.DEFAULT_PASSWORD);
         
-        // Verify login success
-        Assert.assertTrue(loginPage.isLoginSuccessful(), "Login should be successful");
+        // Soft Assertions - Continue execution even if one fails
+        // Using global softAssert instance (no need to create new one)
+        softAssert.assertTrue(loginPage.isLoginSuccessful(), 
+            "Login should be successful");
         
         // Test complete logout process
         logoutPage.logout();
         
-        // Verify logout success
-        Assert.assertTrue(logoutPage.isLogoutSuccessful(), 
+        // Verify logout success with soft assertions
+        softAssert.assertTrue(logoutPage.isLogoutSuccessful(), 
             "Logout should be successful");
         
-        // Verify we're back to login page
-        Assert.assertTrue(logoutPage.isURLContains("login"), 
+        softAssert.assertTrue(logoutPage.isURLContains("login"), 
             "Should be redirected to login page after logout");
+        
+        // Verify all soft assertions at the end
+        softAssert.assertAll();
         
         System.out.println("✓ Logout functionality test passed!");
         System.out.println("Current URL: " + logoutPage.getCurrentURL());
@@ -103,8 +129,9 @@ public class LogoutTest extends BaseTest {
         // Login first
         loginPage.login(TestConfig.DEFAULT_USERNAME, TestConfig.DEFAULT_PASSWORD);
         
-        // Verify login success
-        Assert.assertTrue(loginPage.isLoginSuccessful(), "Login should be successful");
+        // Soft Assertions - Continue execution even if one fails
+        softAssert.assertTrue(loginPage.isLoginSuccessful(), 
+            "Login should be successful");
         
         // Step 1: Click user profile dropdown
         logoutPage.clickUserProfileDropdown();
@@ -114,9 +141,12 @@ public class LogoutTest extends BaseTest {
         logoutPage.clickLogout();
         System.out.println("✓ Step 2: Logout link clicked");
         
-        // Step 3: Verify logout success
-        Assert.assertTrue(logoutPage.isLogoutSuccessful(), 
+        // Step 3: Verify logout success with soft assertions
+        softAssert.assertTrue(logoutPage.isLogoutSuccessful(), 
             "Logout should be successful");
+        
+        // Verify all soft assertions at the end
+        softAssert.assertAll();
         
         System.out.println("✓ Logout step by step test passed!");
         System.out.println("=== Test Method Complete ===\n");
