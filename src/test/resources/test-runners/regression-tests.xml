@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="OrangeHRM Regression Test Suite" verbose="1">
+    
+    <listeners>
+        <listener class-name="com.OrangeHRM.UITest.utilities.ExtentReportManager"/>
+    </listeners>
+    
+    <test name="Regression Tests - Complete Functionality" preserve-order="true">
+        <description>
+            Regression tests for complete OrangeHRM functionality
+            These tests cover all features and edge cases
+        </description>
+        
+        <classes>
+            <!-- Login Tests - All login scenarios -->
+            <class name="com.OrangeHRM.UITest.testCases.LoginTest">
+                <methods>
+                    <include name="testValidLogin"/>
+                </methods>
+            </class>
+            
+            <!-- Data-Driven Login Tests -->
+            <class name="com.OrangeHRM.UITest.testCases.LoginDataDrivenTest">
+                <methods>
+                    <include name="testValidLoginWithExcelData"/>
+                    <include name="testInvalidLoginWithExcelData"/>
+                    <include name="testLoginWithRandomData"/>
+                    <include name="testMultipleScenarios"/>
+                    <include name="testUserProfileWithRandomData"/>
+                </methods>
+            </class>
+            
+            <!-- Dashboard Tests - All dashboard functionality -->
+            <class name="com.OrangeHRM.UITest.testCases.DashboardTest">
+                <methods>
+                    <include name="testDashboardAfterLogin"/>
+                    <include name="testMainMenuVisibility"/>
+                    <include name="testDashboardWidgets"/>
+                    <include name="testMenuNavigation"/>
+                    <include name="testSearchFunctionality"/>
+                    <include name="testCompleteDashboardFunctionality"/>
+                </methods>
+            </class>
+            
+            <!-- Logout Tests - All logout scenarios -->
+            <class name="com.OrangeHRM.UITest.testCases.LogoutTest">
+                <methods>
+                    <include name="testProfileDropdownVisibility"/>
+                    <include name="testProfileDropdownClick"/>
+                    <include name="testLogoutFunctionality"/>
+                    <include name="testLogoutStepByStep"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+</suite>

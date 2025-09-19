@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="OrangeHRM Test Suite - Chrome Only" verbose="1">
+<suite name="OrangeHRM Test Suite - Chrome Only" verbose="1" parallel="Methods" thread-count="2">
     
     <!-- Extent Reports Listener -->
     <listeners>
@@ -8,12 +8,12 @@
     </listeners>
     
     <!-- Login Tests - Chrome -->
-  <test name="Login Tests - Chrome">
+ <!-- <test name="Login Tests - Chrome">
         <parameter name="browser" value="chrome"/>
         <classes>
             <class name="com.OrangeHRM.UITest.testCases.LoginTest"/>
         </classes>
-    </test> 
+    </test> -->
     
     <!-- Dashboard Tests - Chrome -->
    <!-- <test name="Dashboard Tests - Chrome">
@@ -24,10 +24,18 @@
     </test> -->
     
     <!-- Logout Tests - Chrome -->
-    <test name="Logout Tests - Chrome">
+  <!--  <test name="Logout Tests - Chrome">
         <parameter name="browser" value="chrome"/>
         <classes>
             <class name="com.OrangeHRM.UITest.testCases.LogoutTest"/>
+        </classes>
+    </test> -->
+
+    <!-- DataDriven Tests - Chrome -->
+    <test name="DataDriven Tests - Chrome">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="com.OrangeHRM.UITest.testCases.LoginDataDrivenTest"/>
         </classes>
     </test>
     

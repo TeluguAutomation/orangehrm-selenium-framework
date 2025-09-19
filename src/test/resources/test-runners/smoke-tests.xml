@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="OrangeHRM Smoke Test Suite" verbose="1">
+    
+    <listeners>
+        <listener class-name="com.OrangeHRM.UITest.utilities.ExtentReportManager"/>
+    </listeners>
+    
+    <test name="Smoke Tests - Critical Functionality" preserve-order="true">
+        <description>
+            Smoke tests for critical OrangeHRM functionality
+            These tests should run quickly and verify basic functionality
+        </description>
+        
+        <classes>
+            <!-- Login Tests - Critical for all other functionality -->
+            <class name="com.OrangeHRM.UITest.testCases.LoginTest">
+                <methods>
+                    <include name="testValidLogin"/>
+                </methods>
+            </class>
+            
+            <!-- Dashboard Tests - Verify post-login functionality -->
+            <class name="com.OrangeHRM.UITest.testCases.DashboardTest">
+                <methods>
+                    <include name="testDashboardAfterLogin"/>
+                </methods>
+            </class>
+            
+            <!-- Logout Tests - Verify logout functionality -->
+            <class name="com.OrangeHRM.UITest.testCases.LogoutTest">
+                <methods>
+                    <include name="testLogoutFunctionality"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+</suite>

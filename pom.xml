@@ -81,6 +81,28 @@
     <version>2.23.1</version>
 </dependency>
 
+<!-- Apache POI Dependencies for Excel file handling -->
+<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi</artifactId>
+    <version>5.2.5</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>5.2.5</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-scratchpad -->
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-scratchpad</artifactId>
+    <version>5.2.5</version>
+</dependency>
+
 
   </dependencies>
 
@@ -93,7 +115,7 @@
         <version>3.0.0</version>
         <configuration>
           <suiteXmlFiles>
-            <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+            <suiteXmlFile>src/test/resources/test-runners/testng.xml</suiteXmlFile>
           </suiteXmlFiles>
         </configuration>
       </plugin>
